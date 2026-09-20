@@ -1,10 +1,10 @@
-# 💊 DrugSymptomFinder (Student Demo Project)
+#  DrugSymptomFinder 
 
-**DrugSymptomFinder** is a student demonstration web application that bridges lay-person symptom inputs (e.g., *"fever"*, *"joint pain"*, *"seizures"*, *"high blood sugar"*) to official clinical drug approval records using synonym expansion and fuzzy matching.
+**DrugSymptomFinder** is a web application that bridges lay-person symptom inputs (e.g., *"fever"*, *"joint pain"*, *"seizures"*, *"high blood sugar"*) to official clinical drug approval records using synonym expansion and fuzzy matching.
 
 ---
 
-## 📌 Important Data & Project Disclaimers
+##  Important Data & Project Disclaimers
 
 > [!IMPORTANT]
 > 1. **Data Source**: This project uses real approved drug data from the **Central Drugs Standard Control Organization (CDSCO)**, Ministry of Health and Family Welfare, Government of India (`cdsco_drugs_for_app.csv`, 3,144 rows).
@@ -14,7 +14,7 @@
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+##  Tech Stack & Architecture
 
 - **Backend**: Python 3.9+, [FastAPI](https://fastapi.tiangolo.com/), [Uvicorn](https://www.uvicorn.org/)
 - **Data Engine**: SQLite 3, `pandas` (for ingestion), `rapidfuzz` (for fuzzy string matching & partial token ratio)
@@ -22,7 +22,7 @@
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 DrugSymptomFinder/
@@ -42,7 +42,7 @@ DrugSymptomFinder/
 
 ---
 
-## 🚀 Quick Start & Setup Instructions
+##  Quick Start & Setup Instructions
 
 ### 1. Prerequisite Setup
 Ensure Python 3.9+ is installed on your system.
@@ -72,11 +72,11 @@ python -m uvicorn main:app --reload --port 8000
 
 ### 5. Access the Web Application
 Open your web browser and navigate to:
-👉 **`http://127.0.0.1:8000`**
+ **`http://127.0.0.1:8000`**
 
 ---
 
-## 🔍 How Synonym Expansion & Fuzzy Matching Work
+## 🔍How Synonym Expansion & Fuzzy Matching Work
 
 1. **User Input**: User types a lay symptom (e.g. `"fever"`).
 2. **Synonym Expansion**: `symptoms.py` expands `"fever"` to clinical terms `["pyrexia", "fever", "hyperthermia", "febrile", "temperature"]`.
