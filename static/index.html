@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrugSymptomFinder | CDSCO Approved Drug Search</title>
+    <meta name="description" content="Educational student demo application for matching plain language symptom terms against real Indian government CDSCO approved drug indications.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-container">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-notes-medical"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h1>DrugSymptom<span>Finder</span></h1>
+                        <p class="tagline">CDSCO Approved Clinical Indication Search Engine</p>
+                    </div>
+                </div>
+                <div class="header-stats" id="headerStats">
+                    <div class="stat-badge">
+                        <i class="fa-solid fa-database"></i>
+                        <span id="statCount">3,144</span> Approved Drugs
+                    </div>
+                    <div class="stat-badge highlight">
+                        <i class="fa-solid fa-check-double"></i> Verified CDSCO Data
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-container">
+            <!-- Search Section -->
+            <section class="search-section">
+                <div class="search-card">
+                    <h2 class="search-title">Find Approved Medications by Symptom</h2>
+                    <p class="search-subtitle">Enter symptoms in plain language (e.g. <em>fever</em>, <em>joint pain</em>, <em>seizures</em>, <em>cough</em>). Our synonym expansion maps lay terms to formal clinical indications.</p>
+
+                    <div class="search-box-wrapper">
+                        <div class="search-input-group">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input 
+                                type="text" 
+                                id="symptomInput" 
+                                placeholder="Type a symptom (e.g., fever, high blood pressure, joint pain...)" 
+                                autocomplete="off"
+                            >
+                            <button id="clearSearchBtn" class="clear-btn hidden" title="Clear search">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                            <button id="searchBtn" class="search-btn">
+                                <span>Search Drugs</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Autocomplete Suggestions Dropdown -->
+                        <div id="autocompleteDropdown" class="autocomplete-dropdown hidden"></div>
+                    </div>
+
+                    <!-- Quick Preset Symptoms -->
+                    <div class="quick-presets">
+                        <span class="presets-label"><i class="fa-solid fa-stethoscope"></i> Common Symptoms:</span>
+                        <div class="presets-pills">
+                            <button class="preset-btn" data-symptom="Fever">Fever</button>
+                            <button class="preset-btn" data-symptom="Joint Pain">Joint Pain</button>
+                            <button class="preset-btn" data-symptom="Seizures">Seizures</button>
+                            <button class="preset-btn" data-symptom="Asthma">Asthma</button>
+                            <button class="preset-btn" data-symptom="High Blood Sugar">High Blood Sugar</button>
+                            <button class="preset-btn" data-symptom="Headache">Headache</button>
+                            <button class="preset-btn" data-symptom="Stomach Ulcer">Stomach Ulcer</button>
+                            <button class="preset-btn" data-symptom="Skin Rash">Skin Rash</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section Header -->
+            <section class="results-header-section hidden" id="resultsHeaderSection">
+                <div class="results-meta">
+                    <h3 id="resultsQueryTitle">Results for "<span id="activeQueryText">fever</span>"</h3>
+                    <span class="results-count-badge" id="resultsCountBadge">0 Matches Found</span>
+                </div>
+                <div class="results-filter">
+                    <label for="minScoreFilter">Minimum Confidence Score:</label>
+                    <select id="minScoreFilter">
+                        <option value="40">40% (Broad)</option>
+                        <option value="55" selected>55% (Moderate)</option>
+                        <option value="70">70% (High Precision)</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <section class="loading-state hidden" id="loadingState">
+                <div class="spinner-container"></div>
+                <h3>Searching CDSCO Clinical Records...</h3>
+                <p>Applying synonym expansion and calculating fuzzy match confidence scores</p>
+            </section>
+
+            <!-- Empty State -->
+            <section class="empty-state hidden" id="emptyState">
+                <div class="empty-icon-box">
+                    <i class="fa-solid fa-stethoscope"></i>
+                </div>
+                <h3>No Direct Drug Matches Found</h3>
+                <p>We couldn't find approval records matching "<span id="emptyQueryText">term</span>" with current score threshold.</p>
+                <div class="empty-suggestions">
+                    <h4>Try the following recommendations:</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-circle-dot"></i> Try broader symptoms (e.g. search <strong>"pain"</strong> instead of <em>"sharp left knee ache"</em>).</li>
+                        <li><i class="fa-solid fa-circle-dot"></i> Use one of our common symptom presets above.</li>
+                        <li><i class="fa-solid fa-circle-dot"></i> Lower the minimum confidence threshold in the filter dropdown.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Results Card Grid -->
+            <section class="results-grid" id="resultsGrid"></section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-container">
+                <div class="footer-info">
+                    <p><strong>DrugSymptomFinder</strong> — Student Demo Project</p>
+                    <p class="source-note">Data Source: Official Central Drugs Standard Control Organization (CDSCO), Ministry of Health & Family Welfare, Govt. of India (3,144 approved records).</p>
+                    <p class="note-highlight"><i class="fa-solid fa-circle-info"></i> Note: Source data contains NO manufacturer column. Drug approval dates are displayed as documented in government records.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
